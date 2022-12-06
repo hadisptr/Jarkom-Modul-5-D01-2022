@@ -1,29 +1,37 @@
-# Jarkom-Modul-5-D01-2022
+# Jarkom-Modul-2-D01-2022
 
-Repository Praktikum Jaringan Komputer Modul 5 Jaringan Komputer
+### Kelompok D01
 
-.  
-Junaedi Akbar <br>
-(05111940000041)
-<br>
-Zydhan Linnar Putra
-<br>
-(05111940000118)
-<br>
-M.Fajri Davyza Chaniago
-<br>
-(05111940000180)  
-.
+<table>
+    <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>NRP</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Ananda Hadi Saputra </td>
+        <td>5025201148</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Nethaneel Patricio Linggar</td>
+        <td>5025201180</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Yehezkiel Wiradhika</td>
+        <td>5025201086</td>
+    </tr>
+</table>
 
 # Praktikum Modul 5
 
-### 📅 5 - 7 Desember 2021
-
-### (A) Tugas pertama kalian yaitu membuat topologi jaringan sesuai dengan rancangan yang diberikan Luffy seperti dibawah ini:
+### (A) Tugas pertama kalian yaitu membuat topologi jaringan sesuai dengan rancangan yang diberikan Loid dibawah ini:
 
 ![Soal a](img/soal-a.png)
 
-### (B) Konfigurasi IP dengan VLSM (Variable Length Subnet Masking) :
+### (B) Untuk menjaga perdamaian dunia, Loid ingin meminta kalian untuk membuat topologi tersebut menggunakan teknik CIDR atau VLSM setelah melakukan subnetting:
 
 ![Penamaan VLSM](img/b-vlsm-bulet.png)
 
@@ -48,7 +56,7 @@ M.Fajri Davyza Chaniago
 
 - SETTING INTERFACE PADA GNS3
 
-**Foosha**
+**Strix**
 
 ```
 auto eth0
@@ -70,7 +78,7 @@ iface eth2 inet static
 
 ```
 
-**Water7**
+**Westalis**
 
 ```
 auto eth0
@@ -97,7 +105,7 @@ iface eth3 inet static
 
 ```
 
-**GUANHAO**
+**Ostania**
 
 ```
 auto eth0
@@ -123,28 +131,28 @@ iface eth3 inet static
 	netmask 255.255.255.0
 ```
 
-**Blueno**
+**Desmond**
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**Chiper**
+**Forger**
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**Elena**
+**Blackbell**
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**fukurou**
+**Briar**
 
 ```
 auto eth0
@@ -152,7 +160,7 @@ iface eth0 inet dhcp
 
 ```
 
-**MainGate**
+**SSS**
 
 ```
 # Static config for eth0
@@ -165,7 +173,7 @@ iface eth0 inet static
 
 ```
 
-**Jorge**
+**Garden**
 
 ```
 # Static config for eth0
@@ -178,7 +186,7 @@ iface eth0 inet static
 
 ```
 
-**Doriki**
+**Eden**
 
 ```
 # Static config for eth0
@@ -190,7 +198,7 @@ iface eth0 inet static
       up echo nameserver 192.168.122.1 > /etc/resolv.conf
 ```
 
-**Jipangu**
+**WISE**
 
 ```
 # Static config for eth0
@@ -202,9 +210,9 @@ iface eth0 inet static
       up echo nameserver 192.185.7.130 > /etc/resolv.conf
 ```
 
-### (C) Routing
+### (C) Anya, putri pertama Loid, juga berpesan kepada anda agar melakukan Routing agar setiap perangkat pada jaringan tersebut dapat terhubung:
 
-**Foosha**
+**Strix**
 
 ```
 # Lewat eth2
@@ -218,19 +226,19 @@ route add -net 192.185.7.136 netmask 255.255.255.248 gw 192.185.7.150   # A6
 route add -net 192.185.6.0 netmask 255.255.255.0 gw 192.185.7.150   # A8
 ```
 
-### (D) Tugas berikutnya adalah memberikan ip pada subnet Blueno, Cipher, Fukurou, dan Elena secara dinamis menggunakan bantuan DHCP server. Kemudian kalian ingat bahwa kalian harus setting DHCP Relay pada router yang menghubungkannya.
+### (D) Tugas berikutnya adalah memberikan ip pada subnet Forger, Desmond, Blackbell, dan Briar secara dinamis menggunakan bantuan DHCP server. Kemudian kalian ingat bahwa kalian harus setting DHCP Relay pada router yang menghubungkannya:
 
 cara:
-Karena Sebelumnya kita telah memberikan IP dhcp kepada Blueno, Cipher, Fukurou, dan Elena :
+Karena Sebelumnya kita telah memberikan IP dhcp kepada Forger, Desmond, Blackbell, dan Briar :
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-Pada foosha disetting sebagai dhcp relay
+Pada Strix disetting sebagai dhcp relay
 
-**Foosha**
+**Strix**
 
 ```
 apt-get update
@@ -244,7 +252,7 @@ OPTIONS=
 
 ```
 
-**Water 7**
+**westalis**
 
 ```
 apt-get update
@@ -261,7 +269,7 @@ service isc-dhcp-relay restart
 
 ```
 
-**Guanhao**
+**Ostania**
 
 ```
 
@@ -281,33 +289,35 @@ service isc-dhcp-relay restart
 
 ```
 
-### (1) Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Foosha menggunakan iptables, tetapi Luffy tidak ingin menggunakan MASQUERADE.
+### (1) Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
 
-Disini IP Foosha sudah diubah menjadi `192.168.122.1` (static) sehingga iptables-nya disetel ke IP tersebut.
+Disini IP Strix sudah diubah menjadi `192.168.122.1` (static) sehingga iptables-nya disetel ke IP tersebut.
 
 ```bash
-# IP Foosha static 192.168.122.11
 iptables -t nat -A POSTROUTING -o eth0 -s 192.185.0.0/21 -j SNAT --to-source 192.168.122.11
 ```
 
-### (2) Kalian diminta untuk mendrop semua akses HTTP dari luar Topologi kalian pada server yang memiliki ip DHCP dan DNS Server demi menjaga keamanan.
+### (2) Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan.
 
-Untuk memblokir cukup melakukan negasi IP topologi dan mengarah ke subnet dari Jipangu dan Doriki:
+Untuk memblokir cukup melakukan negasi IP topologi dan mengarah ke subnet dari Eden dan WISE:
 
 ```bash
-# Blokir HTTP request ke DNS & DHCP dari luar subnet
 iptables -A INPUT ! -s 192.185.0.0/21 -d 192.185.7.128/29 -p tcp --dport 80 -j DROP
+iptables -A INPUT ! -s 192.185.0.0/21 -d 192.185.7.128/29 -p udp --dport 53 -j DROP
+
+iptables -A FORWARD -p tcp -d 192.190.0.19 -i eth0 -j DROP # Drop semua TCP
+iptables -A FORWARD -p udp -d 192.190.0.19 -i eth0 -j DROP # Drop semua UDP
 ```
 
-### (3) Karena kelompok kalian maksimal terdiri dari 3 orang. Luffy meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 3 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
+### (3) Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
 
-Menggunakan modul `connlimit` kita dapat melakukan reject pada koneksi yang berjumlah > 3. Script ini dijalankan pada Jipangu dan Doriki:
+Menggunakan modul `connlimit` kita dapat melakukan reject pada koneksi yang berjumlah > 3. Script ini dijalankan pada Eden dan WISE:
 
 ```bash
-iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j REJECT
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j REJECT
 ```
 
-### (4) Kemudian kalian diminta untuk membatasi akses ke Doriki yang berasal dari subnet Blueno, Cipher, Elena dan Fukuro dengan beraturan sebagai berikut :Akses dari subnet Blueno dan Cipher hanya diperbolehkan pada pukul 07.00 - 15.00 pada hari Senin sampai Kamis.
+### (4) Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
 
 Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Jipangu dan Doriki:
 
