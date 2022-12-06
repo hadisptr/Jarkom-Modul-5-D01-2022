@@ -215,15 +215,13 @@ iface eth0 inet static
 **Strix**
 
 ```
-# Lewat eth2
-route add -net 192.185.7.128 netmask 255.255.255.248 gw 192.185.7.146   # A3
-route add -net 192.185.7.0 netmask 255.255.255.128 gw 192.185.7.146   # A1
-route add -net 192.185.0.0 netmask 255.255.252.0 gw 192.185.7.146   # A7
+route add -net 192.185.7.128 netmask 255.255.255.248 gw 192.185.7.146
+route add -net 192.185.7.0 netmask 255.255.255.128 gw 192.185.7.146
+route add -net 192.185.0.0 netmask 255.255.252.0 gw 192.185.7.146
 
-# Lewat eth1
-route add -net 192.185.4.0 netmask 255.255.254.0 gw 192.185.7.150   # A2
-route add -net 192.185.7.136 netmask 255.255.255.248 gw 192.185.7.150   # A6
-route add -net 192.185.6.0 netmask 255.255.255.0 gw 192.185.7.150   # A8
+route add -net 192.185.4.0 netmask 255.255.254.0 gw 192.185.7.150
+route add -net 192.185.7.136 netmask 255.255.255.248 gw 192.185.7.150
+route add -net 192.185.6.0 netmask 255.255.255.0 gw 192.185.7.150
 ```
 
 ### (D) Tugas berikutnya adalah memberikan ip pada subnet Forger, Desmond, Blackbell, dan Briar secara dinamis menggunakan bantuan DHCP server. Kemudian kalian ingat bahwa kalian harus setting DHCP Relay pada router yang menghubungkannya:
