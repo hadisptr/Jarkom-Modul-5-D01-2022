@@ -328,7 +328,9 @@ iptables -A INPUT -s 192.185.0.0/22 -j REJECT
 
 ### (5) Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
 
-Membuat zone DNS baru pada `c03.com` dan set A record ke dua IP address.
+**Eden**
+
+Membuat zone DNS baru pada `jarkomD01.com` dan set A record ke dua IP address.
 
 ```bash
 # Buat zone
@@ -352,12 +354,20 @@ echo ";
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      c03.com.
+@       IN      NS      jarkomD01.com.
 @       IN      A       192.185.7.138 ; IP Garden
 @       IN      A       192.185.7.139 ; IP SSS
-www     IN      CNAME   c03.com.
+www     IN      CNAME   jarkomD01.com.
 " > /etc/bind/jarkom/jarkomD01.com
 
 # Restart bind9
 service bind9 restart
+```
+**Ostania**
+- Masukkan perintah:
+```
+iptables -A PREROUTING -t nat -p tcp -d 192.185.8.1 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.26:80
+iptables -A PREROUTING -t nat -p tcp -d 192.185.8.1 --dport 80 -j DNAT --to-destination 192.185.0.27:80
+iptables -t nat -A POSTROUTING -p tcp -d 192.185.0.26 --dport 80 -j SNAT --to-source 192.185.8.1:80
+iptables -t nat -A POSTROUTING -p tcp -d 192.185.0.27 --dport 80 -j SNAT --to-source 192.185.8.1:80
 ```
