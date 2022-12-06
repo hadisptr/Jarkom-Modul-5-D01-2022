@@ -302,9 +302,6 @@ iptables -t nat -A POSTROUTING -o eth0 -s 192.185.0.0/21 -j SNAT --to-source 192
 Untuk memblokir cukup melakukan negasi IP topologi dan mengarah ke subnet dari Eden dan WISE:
 
 ```bash
-iptables -A INPUT ! -s 192.185.0.0/21 -d 192.185.7.128/29 -p tcp --dport 80 -j DROP
-iptables -A INPUT ! -s 192.185.0.0/21 -d 192.185.7.128/29 -p udp --dport 53 -j DROP
-
 iptables -A FORWARD -p tcp -d 192.190.0.19 -i eth0 -j DROP # Drop semua TCP
 iptables -A FORWARD -p udp -d 192.190.0.19 -i eth0 -j DROP # Drop semua UDP
 ```
@@ -319,41 +316,25 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 
 ### (4) Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
 
-Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Jipangu dan Doriki:
+Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Eden dan WISE:
 
 ```bash
-iptables -A INPUT -s 192.185.7.0/25 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 192.185.7.0/25 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
 iptables -A INPUT -s 192.185.7.0/25 -j REJECT
 
-iptables -A INPUT -s 192.185.0.0/22 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 192.185.0.0/22 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
 iptables -A INPUT -s 192.185.0.0/22 -j REJECT
 ```
 
-### (5) Akses dari subnet Elena dan Fukuro hanya diperbolehkan pada pukul 15.01 hingga pukul 06.59 setiap harinya.Selain itu di reject
-
-Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Jipangu dan Doriki:
-
-```bash
-iptables -A INPUT -s 192.185.4.0/23 -m time --timestart 15:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j ACCEPT
-iptables -A INPUT -s 192.185.4.0/23 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j ACCEPT
-iptables -A INPUT -s 192.185.4.0/23 -j REJECT
-
-iptables -A INPUT -s 192.185.6.0/24 -m time --timestart 15:01 --timestop 23:59 --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j ACCEPT
-iptables -A INPUT -s 192.185.6.0/24 -m time --timestart 00:00 --timestop 06:59 --weekdays Mon,Tue,Wed,Thu,Fri,Sat,Sun -j ACCEPT
-iptables -A INPUT -s 192.185.6.0/24 -j REJECT
-```
-
-Terdapat tricky case yaitu konfigurasi waktu yang melewati 2 hari. Oleh karena itu dipecah jamnya menjadi 15.01 - 23.59 dan 00.00 hingga 06.59.
-
-### (6) Karena kita memiliki 2 Web Server, Luffy ingin Guanhao disetting sehingga setiap request dari client yang mengakses DNS Server akan didistribusikan secara bergantian pada Jorge dan Maingate
+### (5) Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
 
 Membuat zone DNS baru pada `c03.com` dan set A record ke dua IP address.
 
 ```bash
 # Buat zone
-echo "zone \"c03.com\" {
+echo "zone \"jarkomD01.com\" {
         type master;
-        file \"/etc/bind/jarkom/c03.com\";
+        file \"/etc/bind/jarkom/jarkomD01.com\";
 };" > /etc/bind/named.conf.local
 
 # Buat foldernya
@@ -364,7 +345,7 @@ echo ";
 ; BIND data file for local loopback interface
 ;
 \$TTL    604800
-@       IN      SOA     c03.com. root.c03.com. (
+@       IN      SOA     jarkomD01.com. root.jarkomD01.com. (
                      2021120701         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
@@ -372,10 +353,10 @@ echo ";
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      c03.com.
-@       IN      A       192.185.7.138 ; IP Jorge
-@       IN      A       192.185.7.139 ; IP Maingate
+@       IN      A       192.185.7.138 ; IP Garden
+@       IN      A       192.185.7.139 ; IP SSS
 www     IN      CNAME   c03.com.
-" > /etc/bind/jarkom/c03.com
+" > /etc/bind/jarkom/jarkomD01.com
 
 # Restart bind9
 service bind9 restart
