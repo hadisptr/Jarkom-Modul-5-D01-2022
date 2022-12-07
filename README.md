@@ -51,7 +51,7 @@
 
 ### Tree :
 
-![Tree](img/b-tree-vlsm.png)
+![Tree](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/pohon.png)
 
 ### Pembagian IP
 
@@ -318,19 +318,19 @@ OPTIONS=""
 
 ##### Forger
 
-![DHCP Forger](https://cdn.discordapp.com/attachments/856609726225973278/1049322570123579422/image.png)
+![DHCP Forger](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/0/0.1.png)
 
 ##### Desmond
 
-![DHCP Desmond](https://cdn.discordapp.com/attachments/856609726225973278/1049322771928330340/image.png)
+![DHCP Desmond](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/0/0.2.png)
 
 ##### Briar
 
-![DHCP Briar](https://cdn.discordapp.com/attachments/856609726225973278/1049322929411866624/image.png)
+![DHCP Briar](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/0/0.3.png)
 
 ##### Blackbell
 
-![DHCP Blackbell](https://cdn.discordapp.com/attachments/856609726225973278/1049323163168813066/image.png)
+![DHCP Blackbell](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/0/0.4.png)
 
 
 ### (1) Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
@@ -356,7 +356,7 @@ iptables di atas akan melalukan drop pada semua TCP dan UDP dengan tujuan **WISE
 
 ##### Ping google.com pada WISE setelah iptables
 
-![Ping Firewall](https://cdn.discordapp.com/attachments/856609726225973278/1049355613160882186/image.png)
+![Ping Firewall](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/2/1.png)
 
 
 ### (3) Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
@@ -368,11 +368,11 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 ```
 ### Testing ping Eden (192.185.0.18) sebagai DNS Server dengan 3 client
 
-![Ping Forger](https://cdn.discordapp.com/attachments/856609726225973278/1049358966699860019/image.png)
+![Ping Forger](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/3/1.png)
 
-![Ping Desmond](https://cdn.discordapp.com/attachments/856609726225973278/1049359050351050812/image.png)
+![Ping Briar](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/3/2.png)
 
-![Ping Briar](https://cdn.discordapp.com/attachments/856609726225973278/1049359380866416730/image.png)
+![Ping Blackbell](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/3/3.png)
 
 
 ### (4) Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
