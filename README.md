@@ -1,4 +1,4 @@
-# Jarkom-Modul-2-D01-2022
+# Jarkom-Modul-5-D01-2022
 
 ### Kelompok D01
 
@@ -24,8 +24,6 @@
         <td>5025201086</td>
     </tr>
 </table>
-
-# Praktikum Modul 5
 
 ### (A) Tugas pertama kalian yaitu membuat topologi jaringan sesuai dengan rancangan yang diberikan Loid dibawah ini:
 
