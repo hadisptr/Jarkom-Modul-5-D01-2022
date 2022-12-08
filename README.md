@@ -253,7 +253,7 @@ subnet 192.185.0.128 netmask 255.255.255.128 {
 # Desmond (A3)
 subnet 192.185.4.0 netmask 255.255.252.0 {
         range 192.185.4.2 192.185.7.254;
-        option routers 192.190.4.1;
+        option routers 192.185.4.1;
         option broadcast-address 192.185.7.255;
         option domain-name-servers 192.185.0.18;
         default-lease-time 600;
@@ -311,6 +311,7 @@ SERVERS="192.185.0.19"
 INTERFACES="eth0 eth1 eth2 eth3"
 OPTIONS=""
 ```
+Dan lakukan `service isc-dhcp-relay restart`
 
 #### Testing
 
@@ -375,21 +376,29 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j
 
 ### (4) Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
 
-Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Eden dan WISE:
+Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan pada waktu yang diperbolehkan, sisanya direject. Script ini dijalankan pada Garden dan SSS:
 
 ```bash
 iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
 iptables -A INPUT -j REJECT
 ```
+#### Testing
 
+Ping **Garden** (192.185.0.27) pada jam kerja
+
+![Ping Jam Kerja](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/4/1.png)
+
+Ping **Garden** (192.185.0.27) pada hari libur
+
+![Ping Hari Libur](https://github.com/hadisptr/Jarkom-Modul-5-D01-2022/blob/main/Modul%205/4/2.png)
 
 ### (5) Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
 
 Pada **Ostania** dilakukan konfigurasi iptables sebagai berikut
 
 ```bash
-iptables -t nat -A PREROUTING -p tcp -d 192.190.0.27 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.190.0.26:80
-iptables -t nat -A PREROUTING -p tcp -d 192.190.0.26 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.190.0.27:443
+iptables -t nat -A PREROUTING -p tcp -d 192.185.0.27 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.26:80
+iptables -t nat -A PREROUTING -p tcp -d 192.185.0.26 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.27:443
 ```
 
 ### (6) Logging paket yang di-drop dengan standard syslog level
