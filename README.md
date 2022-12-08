@@ -381,15 +381,6 @@ Menggunakan modul `time` kita dapat melakukan accept pada koneksi yang berjalan 
 iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
 iptables -A INPUT -j REJECT
 ```
-### Testing
-
-Ping **Garden** (192.190.0.27) pada jam kerja
-
-![Ping Jam Kerja](https://cdn.discordapp.com/attachments/856609726225973278/1049978185523134525/image.png)
-
-Ping **Garden** (192.190.0.27) pada hari libur
-
-![Ping Hari Libur](https://cdn.discordapp.com/attachments/856609726225973278/1049978394185576488/image.png)
 
 
 ### (5) Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
@@ -399,48 +390,6 @@ Pada **Ostania** dilakukan konfigurasi iptables sebagai berikut
 ```bash
 iptables -t nat -A PREROUTING -p tcp -d 192.190.0.27 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.190.0.26:80
 iptables -t nat -A PREROUTING -p tcp -d 192.190.0.26 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.190.0.27:443
-```
-
-Membuat zone DNS baru pada `jarkomD01.com` dan set A record ke dua IP address.
-
-```bash
-# Buat zone
-echo "zone \"jarkomD01.com\" {
-        type master;
-        file \"/etc/bind/jarkom/jarkomD01.com\";
-};" > /etc/bind/named.conf.local
-
-# Buat foldernya
-mkdir /etc/bind/jarkom/
-
-# Buat load balancing di domain utama
-echo ";
-; BIND data file for local loopback interface
-;
-\$TTL    604800
-@       IN      SOA     jarkomD01.com. root.jarkomD01.com. (
-                     2021120701         ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
-;
-@       IN      NS      jarkomD01.com.
-@       IN      A       192.185.0.27 ; IP Garden
-@       IN      A       192.185.0.26 ; IP SSS
-www     IN      CNAME   jarkomD01.com.
-" > /etc/bind/jarkom/jarkomD01.com
-
-# Restart bind9
-service bind9 restart
-```
-**Ostania**
-- Masukkan perintah:
-```
-iptables -A PREROUTING -t nat -p tcp -d 192.185.8.1 --dport 80 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.26:80
-iptables -A PREROUTING -t nat -p tcp -d 192.185.8.1 --dport 80 -j DNAT --to-destination 192.185.0.27:80
-iptables -t nat -A POSTROUTING -p tcp -d 192.185.0.26 --dport 80 -j SNAT --to-source 192.185.8.1:80
-iptables -t nat -A POSTROUTING -p tcp -d 192.185.0.27 --dport 80 -j SNAT --to-source 192.185.8.1:80
 ```
 
 ### (6) Logging paket yang di-drop dengan standard syslog level
