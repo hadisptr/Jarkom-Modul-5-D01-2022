@@ -401,7 +401,7 @@ iptables -t nat -A PREROUTING -p tcp -d 192.185.0.27 --dport 80 -m statistic --m
 iptables -t nat -A PREROUTING -p tcp -d 192.185.0.26 --dport 443 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.27:443
 ```
 
-### (6) Logging paket yang di-drop dengan standard syslog level
+### (6) Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
 
 ```
 iptables -N LOGGING
