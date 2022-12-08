@@ -134,28 +134,28 @@ iface eth3 inet static
         netmask 255.255.254.0
 ```
 
-**Desmond**
+### Desmond
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**Forger**
+### Forger
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**Blackbell**
+### Blackbell
 
 ```
 auto eth0
 iface eth0 inet dhcp
 ```
 
-**Briar**
+### Briar
 
 ```
 auto eth0
@@ -312,6 +312,37 @@ INTERFACES="eth0 eth1 eth2 eth3"
 OPTIONS=""
 ```
 Dan lakukan `service isc-dhcp-relay restart`
+
+#### DNS Forwarder
+
+Pada **Eden** sebagai DNS Server, dilakukan instalasi Bind9
+
+```
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+
+apt-get update
+apt-get install bind9 -y
+
+service bind9 start
+```
+
+Kemudian konfigurasi DNS Forwarder pada file `/etc/bind/named.conf.options`
+
+```
+options {
+        directory \"/var/cache/bind\";
+
+         forwarders {
+                192.168.122.1;
+         };
+
+        allow-query{any;};
+        auth-nxdomain no;    # conform to RFC1035
+        listen-on-v6 { any; };
+};
+```
+
+Setelah itu restart bind9 dengan `service bind9 restart`
 
 #### Testing
 
