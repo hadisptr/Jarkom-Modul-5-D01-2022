@@ -427,31 +427,38 @@ Ping **Garden** (192.185.0.27) pada hari libur
 
 Pertama, konfigurasi untuk masing-masing node dengan port untuk request masing-masing node adalah 80 dan 443 dengan menggunakan ```--dport``` karena saat terjadi request akan terdistribus antara SSS & Garden. Untuk mendistribusikan maka menggunakan ```--every 2``` dan diarahkan pada node sasaran distribusi dengan ```--to-destination```.
 
-
+Pada Ostania
 ```bash
 iptables -A PREROUTING -t nat -p tcp --dport 80 -d 192.185.0.27 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.27:80
 iptables -A PREROUTING -t nat -p tcp --dport 80 -d 192.185.0.27 -j DNAT --to-destination 192.185.0.26:80
 iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.185.0.26 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.185.0.26:443
 iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.185.0.26 -j DNAT --to-destination 192.185.0.27:443
 ```
-#### Testing Request dari Blackbell ke Garden 
-![image](https://user-images.githubusercontent.com/90848018/206828415-41786e0a-dede-487c-973f-36f03b43c0b5.png)
-
-#### Testing Request dari Blackbell ke SSS
-![image](https://user-images.githubusercontent.com/90848018/206828418-7be8704d-b3c6-4596-9356-f901fdcda5e7.png)
-
-#### Index.html di Garden
-![image](https://user-images.githubusercontent.com/90848018/206828452-632d5f42-a8d8-4307-a8c1-da7c9ac972c0.png)
-
-#### Index.html di SSS
-![image](https://user-images.githubusercontent.com/90848018/206828461-892e2532-8432-4e14-a6c9-81fe179b8376.png)
-
 
 ### (6) Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
 
+Pada WISE
 ```
+service isc-dhcp-server restart
+service isc-dhcp-server restart
+
+iptables -N LOGGING
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -j LOGGING
+iptables -A LOGGING -j LOG --log-prefix "IPTables-Dropped: "
+iptables -A LOGGING -j DROP
+
+service rsyslog restart
+```
+Pertama, kita restart dulu DHCP di ```WISE```. Lalu tambahkan syntax ```sylog``` untuk melihat paket yang di drop.
+
+Pada Node lainnya
+```
+
+iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+
 iptables -N LOGGING
 iptables -A INPUT -j LOGGING
-iptables -A LOGGING -m limit --limit 2/min -j LOG --log-prefix "IPTables-Dropped: " --log-level 4
-iptables -A LOGGING -j DROP
+iptables -A LOGGING -j LOG --log-prefix "IPTables-Rejected: "
+iptables -A LOGGING -j REJECT
+
 ```
